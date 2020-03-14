@@ -15,19 +15,19 @@ public class NewGameController {
     }
 
     public void easyGame() throws IOException {
-        App.setDifficulty(1);
+        App.setSodokuBoard(new SodokuBoard(1));
         Parent fxml = loadFXML("game");
         App.setRoot(fxml);
     }
 
     public void mediumGame() throws IOException {
-        App.setDifficulty(2);
+        App.setSodokuBoard(new SodokuBoard(2));
         Parent fxml = loadFXML("game");
         App.setRoot(fxml);
     }
 
     public void hardGame() throws IOException {
-        App.setDifficulty(3);
+        App.setSodokuBoard(new SodokuBoard(3));
         Parent fxml = loadFXML("game");
         App.setRoot(fxml);
     }

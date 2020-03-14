@@ -4,13 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
 
 
 public class SodokuBoard {
@@ -24,8 +20,24 @@ public class SodokuBoard {
         playerBoard = new int[9][9];
     }
 
-    public SodokuBoard(String fileName){
-
+    public SodokuBoard(File file) throws IOException {
+        BufferedReader in = new BufferedReader(new FileReader(file));
+        String inputLine;
+        StringBuffer content = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            content.append(inputLine);
+        }
+        in.close();
+        String stringContent = content.toString();
+        String initialBoard = stringContent.substring(0, ordinalIndexOf(stringContent, "\"", 3));
+        String playerBoard = stringContent.substring(ordinalIndexOf(stringContent, "\"", 3));
+        initialBoard = initialBoard.substring(initialBoard.indexOf("["), initialBoard.lastIndexOf("]") + 1);
+        playerBoard = playerBoard.substring(playerBoard.indexOf("["), playerBoard.lastIndexOf("]") + 1);
+        System.out.println(initialBoard);
+        System.out.println(playerBoard);
+        ObjectMapper mapper  = new ObjectMapper();
+        SodokuBoard.initialBoard = mapper.readValue(initialBoard, int[][].class);
+        SodokuBoard.playerBoard = mapper.readValue(playerBoard, int[][].class);
     }
 
     public int[][] getInitial() {
@@ -109,8 +121,7 @@ public class SodokuBoard {
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
 
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(connection.getInputStream()));
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String inputLine;
                 StringBuffer content = new StringBuffer();
                 while ((inputLine = in.readLine()) != null) {
@@ -204,5 +215,12 @@ public class SodokuBoard {
         boardInformations.put("playerBoard", playerBoard);
         boardInformations.put("initialBoard", initialBoard);
         return boardInformations;
+    }
+
+    private int ordinalIndexOf(String str, String substr, int n) {
+        int pos = str.indexOf(substr);
+        while (--n > 0 && pos != -1)
+            pos = str.indexOf(substr, pos + 1);
+        return pos;
     }
 }

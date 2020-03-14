@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -14,8 +15,7 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
-    private static int difficulty;
-    private static String lastGame;
+    private static SodokuBoard sodokuBoard;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -25,31 +25,27 @@ public class App extends Application {
         stage.setTitle("Sodoku");
         stage.setScene(scene);
         stage.show();
+        File latestFile = new File("latest.json");
+        if (latestFile.exists()) {
+            App.sodokuBoard = new SodokuBoard(latestFile);
+        }
     }
 
-    static void setRoot(Parent fxml) throws IOException {
+    static void setRoot(Parent fxml) {
         scene.setRoot(fxml);
-    }
-
-    static void setDifficulty(int difficulty){
-        App.difficulty = difficulty;
-    }
-
-    static int getDifficulty(){
-        return difficulty;
-    }
-
-    public static void setLastGame(String lastGame) {
-        App.lastGame = lastGame;
-    }
-
-    public static String getLastGame() {
-        return lastGame;
     }
 
     public static Parent loadFXML(String name) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(name + ".fxml"));
         return fxmlLoader.load();
+    }
+
+    public static SodokuBoard getSodokuBoard() {
+        return sodokuBoard;
+    }
+
+    public static void setSodokuBoard(SodokuBoard newSodokuBoard){
+        sodokuBoard = newSodokuBoard;
     }
 
     public static void main(String[] args) {

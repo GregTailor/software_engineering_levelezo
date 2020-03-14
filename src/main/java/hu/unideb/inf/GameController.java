@@ -1,9 +1,7 @@
 package hu.unideb.inf;
 
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
@@ -14,7 +12,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import org.json.simple.JSONObject;
 
 import java.io.File;
@@ -47,7 +44,7 @@ public class GameController implements Initializable, Serializable {
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        sodokuBoard = new SodokuBoard(App.getDifficulty());
+        sodokuBoard = App.getSodokuBoard();
         drawCurrentGameState();
         player_selected_row = 0;
         player_selected_col = 0;
@@ -169,7 +166,7 @@ public class GameController implements Initializable, Serializable {
             for(int col = 0; col<9; col++) {
                 int position_y = row * 50 + 30;
                 int position_x = col * 50 + 20;
-                context.setFill(Color.PURPLE);
+                context.setFill(Color.BLUEVIOLET);
                 context.setFont(new Font(22));
                 if(player[row][col]!=0) {
                     context.fillText(player[row][col] + "", position_x, position_y);
@@ -199,18 +196,14 @@ public class GameController implements Initializable, Serializable {
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json");
         fileChooser.getExtensionFilters().add(extFilter);
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home", "sodoku_application/saved_games")));
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
         File file = fileChooser.showSaveDialog(canvas.getScene().getWindow());
         if (file != null){
             JSONObject boardJSON = sodokuBoard.getBoardJSON();
-            saveToJSON(boardJSON, file);
+            FileWriter fileWriter = new FileWriter(file);
+            fileWriter.write(boardJSON.toJSONString());
+            fileWriter.flush();
         }
-    }
-
-    private void saveToJSON(JSONObject content, File file) throws IOException {
-        FileWriter fileWriter = new FileWriter(file);
-        fileWriter.write(content.toJSONString());
-        fileWriter.flush();
     }
 
     public void mainMenu( ) throws IOException {
