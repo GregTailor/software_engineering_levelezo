@@ -34,7 +34,7 @@ public class MainMenuController implements Initializable {
     }
 
     public void resumeGame() throws IOException {
-        if (App.getSodokuBoard() != null) {
+        if (App.getSudokuBoard() != null) {
             Parent fxml = loadFXML("game");
             App.setRoot(fxml);
         }
@@ -47,20 +47,20 @@ public class MainMenuController implements Initializable {
         fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
         File file = fileChooser.showSaveDialog(button_load_game.getScene().getWindow());
         if (file != null) {
-            SodokuBoard board = new SodokuBoard(file);
-            App.setSodokuBoard(board);
+            SudokuBoard board = new SudokuBoard(file);
+            App.setSudokuBoard(board);
             resumeGame();
         }
     }
 
     public void exitGame() throws IOException {
-        System.out.println(App.getSodokuBoard().getBoardJSON());
+        System.out.println(App.getSudokuBoard().getBoardJSON());
         File latestFile = new File("latest.json");
         if (latestFile.exists() ){
             boolean deleted = latestFile.delete();
         }
         File file = new File("latest.json");
-        JSONObject boardJSON = App.getSodokuBoard().getBoardJSON();
+        JSONObject boardJSON = App.getSudokuBoard().getBoardJSON();
         System.out.println(boardJSON);
         FileWriter fileWriter = new FileWriter(file);
         fileWriter.write(boardJSON.toJSONString());

@@ -15,19 +15,19 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
-    private static SodokuBoard sodokuBoard;
+    private static SudokuBoard sudokuBoard;
 
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("main_menu.fxml"));
         Parent fxml = fxmlLoader.load();
         scene = new Scene(fxml, 540,760);
-        stage.setTitle("Sodoku");
+        stage.setTitle("Sudoku");
         stage.setScene(scene);
         stage.show();
         File latestFile = new File("latest.json");
         if (latestFile.exists()) {
-            App.sodokuBoard = new SodokuBoard(latestFile);
+            App.sudokuBoard = new SudokuBoard(latestFile);
         }
     }
 
@@ -40,12 +40,12 @@ public class App extends Application {
         return fxmlLoader.load();
     }
 
-    public static SodokuBoard getSodokuBoard() {
-        return sodokuBoard;
+    public static SudokuBoard getSudokuBoard() {
+        return sudokuBoard;
     }
 
-    public static void setSodokuBoard(SodokuBoard newSodokuBoard){
-        sodokuBoard = newSodokuBoard;
+    public static void setSudokuBoard(SudokuBoard newSudokuBoard){
+        sudokuBoard = newSudokuBoard;
     }
 
     public static void main(String[] args) {

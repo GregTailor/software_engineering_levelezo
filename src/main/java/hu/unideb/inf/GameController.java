@@ -36,7 +36,7 @@ public class GameController implements Initializable, Serializable {
     @FXML Button button_nine;
     @FXML Canvas canvas;
 
-    SodokuBoard sodokuBoard;
+    SudokuBoard sudokuBoard;
 
     private int player_selected_row;
     private int player_selected_col;
@@ -44,7 +44,7 @@ public class GameController implements Initializable, Serializable {
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        sodokuBoard = App.getSodokuBoard();
+        sudokuBoard = App.getSudokuBoard();
         drawCurrentGameState();
         player_selected_row = 0;
         player_selected_col = 0;
@@ -74,48 +74,48 @@ public class GameController implements Initializable, Serializable {
             }
         });
     }
-    public void buttonOnePressed() {
-        SodokuBoard.modifyCell(1, player_selected_row, player_selected_col);
+    public void buttonOnePressed() throws Exception {
+        sudokuBoard.modifyCell(1, player_selected_row, player_selected_col);
         drawCurrentGameState();
     }
 
-    public void buttonTwoPressed() {
-        SodokuBoard.modifyCell(2, player_selected_row, player_selected_col);
+    public void buttonTwoPressed() throws Exception {
+        sudokuBoard.modifyCell(2, player_selected_row, player_selected_col);
         drawCurrentGameState();
     }
 
-    public void buttonThreePressed() {
-        SodokuBoard.modifyCell(3, player_selected_row, player_selected_col);
+    public void buttonThreePressed() throws Exception {
+        sudokuBoard.modifyCell(3, player_selected_row, player_selected_col);
         drawCurrentGameState();
     }
 
-    public void buttonFourPressed() {
-        SodokuBoard.modifyCell(4, player_selected_row, player_selected_col);
+    public void buttonFourPressed() throws Exception {
+        sudokuBoard.modifyCell(4, player_selected_row, player_selected_col);
         drawCurrentGameState();
     }
 
-    public void buttonFivePressed() {
-        SodokuBoard.modifyCell(5, player_selected_row, player_selected_col);
+    public void buttonFivePressed() throws Exception {
+        sudokuBoard.modifyCell(5, player_selected_row, player_selected_col);
         drawCurrentGameState();
     }
 
-    public void buttonSixPressed() {
-        SodokuBoard.modifyCell(6, player_selected_row, player_selected_col);
+    public void buttonSixPressed() throws Exception {
+        sudokuBoard.modifyCell(6, player_selected_row, player_selected_col);
         drawCurrentGameState();
     }
 
-    public void buttonSevenPressed() {
-        SodokuBoard.modifyCell(7, player_selected_row, player_selected_col);
+    public void buttonSevenPressed() throws Exception {
+        sudokuBoard.modifyCell(7, player_selected_row, player_selected_col);
         drawCurrentGameState();
     }
 
-    public void buttonEightPressed() {
-        SodokuBoard.modifyCell(8, player_selected_row, player_selected_col);
+    public void buttonEightPressed() throws Exception {
+        sudokuBoard.modifyCell(8, player_selected_row, player_selected_col);
         drawCurrentGameState();
     }
 
-    public void buttonNinePressed() {
-        SodokuBoard.modifyCell(9, player_selected_row, player_selected_col);
+    public void buttonNinePressed() throws Exception {
+        sudokuBoard.modifyCell(9, player_selected_row, player_selected_col);
         drawCurrentGameState();
     }
 
@@ -146,7 +146,7 @@ public class GameController implements Initializable, Serializable {
     }
 
     private void drawInitialState(GraphicsContext context){
-        int[][] initial = sodokuBoard.getInitial();
+        int[][] initial = sudokuBoard.getInitial();
         for(int row = 0; row<9; row++) {
             for(int col = 0; col<9; col++) {
                 int position_y = row * 50 + 30;
@@ -161,7 +161,7 @@ public class GameController implements Initializable, Serializable {
     }
 
     private void drawNumbersAddedByPlayer(GraphicsContext context){
-        int[][] player = sodokuBoard.getPlayerBoard();
+        int[][] player = sudokuBoard.getPlayerBoard();
         for(int row = 0; row<9; row++) {
             for(int col = 0; col<9; col++) {
                 int position_y = row * 50 + 30;
@@ -175,7 +175,7 @@ public class GameController implements Initializable, Serializable {
         }
     }
 
-    public void keyboardInteraction(KeyEvent event) {
+    public void keyboardInteraction(KeyEvent event) throws Exception {
         if (event.getCharacter().equals("w") && player_selected_row != 0) player_selected_row--;
         if (event.getCharacter().equals("s") && player_selected_row != 8) player_selected_row++;
         if (event.getCharacter().equals("a") && player_selected_col != 0) player_selected_col--;
@@ -199,7 +199,7 @@ public class GameController implements Initializable, Serializable {
         fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
         File file = fileChooser.showSaveDialog(canvas.getScene().getWindow());
         if (file != null){
-            JSONObject boardJSON = sodokuBoard.getBoardJSON();
+            JSONObject boardJSON = sudokuBoard.getBoardJSON();
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(boardJSON.toJSONString());
             fileWriter.flush();
