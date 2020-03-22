@@ -5,6 +5,10 @@ import java.util.Set;
 
 public class SudokuValidator {
 
+    public int[][] getSodokuBoard() {
+        return sodokuBoard;
+    }
+
     private int[][] sodokuBoard;
 
     public SudokuValidator(SudokuBoard sodokuBoard){
@@ -26,37 +30,39 @@ public class SudokuValidator {
     private boolean validateArrayContainsUniqueValues(int[] array){
         Set<Integer> foundNumbers = new HashSet<Integer>();
         for (int num : array) {
-            if(foundNumbers.contains(num)){
-                return false;
+            if (num != 0) {
+                if (foundNumbers.contains(num)) {
+                    return false;
+                }
+                foundNumbers.add(num);
             }
-            foundNumbers.add(num);
         }
         return true;
     }
 
     public boolean solved(){
         for (int columnIndex = 0; columnIndex < sodokuBoard.length; columnIndex++){
-            if (!validateArrayContainsUniqueValues(getColumn(sodokuBoard, columnIndex))) return false;
+            if (!valuesFitInColumn(columnIndex)) return false;
         }
         for (int rowIndex = 0; rowIndex < sodokuBoard.length; rowIndex++){
-            if (!validateArrayContainsUniqueValues(sodokuBoard[rowIndex])) return false;
+            if (!valuesFitInRow(rowIndex)) return false;
         }
         for (int i = 0; i < sodokuBoard.length; i++){
-            if (!validateArrayContainsUniqueValues(getSquare(sodokuBoard, (int) i / 3, i % 3))) return false;
+            if (!valuesFitInSquare((int) i / 3, i % 3)) return false;
         }
         return true;
     }
 
-    private boolean valueFitsInRow(int[][] board, int val, int row){
-        return !inArray(board[row], val);
+    public boolean valuesFitInRow(int row){
+        return validateArrayContainsUniqueValues(sodokuBoard[row]);
     }
 
-    private boolean valueFitsInColumn(int[][] board, int val, int col){
-        return !inArray(getColumn(board, col), val);
+    public boolean valuesFitInColumn(int col){
+        return validateArrayContainsUniqueValues(getColumn(sodokuBoard, col));
     }
 
-    private boolean valueFitsInSquare(int[][] board, int val, int row, int col){
-        return !inArray(getSquare(board, row, col), val);
+    public boolean valuesFitInSquare(int row, int col){
+        return validateArrayContainsUniqueValues(getSquare(sodokuBoard, row, col));
     }
 
     private int[] getSquare(int[][] board, int row, int col){
@@ -70,6 +76,9 @@ public class SudokuValidator {
                 }
             }
         }
+//        for (int i=0; i<square.length;i++){
+//            System.out.println(square[i]);
+//        }
         return square;
     }
 
@@ -84,13 +93,6 @@ public class SudokuValidator {
     private boolean inArray(int[] array, int val){
         for (int element : array){
             if (element == val) return true;
-        }
-        return false;
-    }
-
-    private boolean hasZeros(int[] array){
-        for (int i = 0; i < array.length; i++){
-            if (array[i] == 0) return true;
         }
         return false;
     }
